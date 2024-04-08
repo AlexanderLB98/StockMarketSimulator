@@ -1,11 +1,10 @@
-
-from src.broker import Broker
 from src.company import Company
 from src.dataAdquisition import DataAdquisition
 from src.market import Market
-from src.portfolio import Portfolio
-from src.strategy import Strategy
 
+from src.strategy import Strategy
+from src.portfolio import Portfolio
+from src.broker import Broker
 
 # Define el diccionario de acciones globalmente
 actions = {0: 'HOLD',
@@ -15,15 +14,17 @@ actions = {0: 'HOLD',
 
 def main():
     # Configuración inicial. Esto en un futuro saldrá de un json
-    initial_capital = 1000 # En euros
+    initial_capital = 10000 # En euros
     num_episodes = 50 # numero de episodios, ya sean dias, semanas, o lo que sea el dt que represente el método step de la clase market
     
     
-    # Se instancia la estrategia
-    strategy = Strategy()
+    
     
     # Se instancia el portfolio
-    portfolio = Portfolio(strategy = strategy, capital = initial_capital)
+    portfolio = Portfolio(capital = initial_capital)
+    
+    # Se instancia la estrategia
+    strategy = Strategy(portfolio = portfolio)
     
     # Se instancia el broker
     broker = Broker(strategy = strategy, capital = initial_capital, portfolio = portfolio)
@@ -37,10 +38,18 @@ def main():
         portfolio.reset()
         print("Comenzando simulación...")
         while not done:
-            action = broker.predict(obs)
-            next_obs, total_reward, reward, done = market.step(action)
+            
+            action = broker.predict(obs, market)
+            
+            market.update_last_price()
+            
+            next_obs, total_reward, reward, done, fixed_action = market.step(action)
+            
+            
+            
             obs = next_obs
-            market.render(action=action)
+            market.render(action=fixed_action)
+            print(f"Current capital: {portfolio.capital}")
             #print(f"Reward: {reward}")
         print("Simulación terminada con éxito")
         print(f"Capital final de {portfolio.capital: .2f} euros\n")

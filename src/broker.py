@@ -1,13 +1,13 @@
 import numpy as np
 
-from src.strategy import Strategy
+# from strategy import Strategy
 
 class Broker():
-    def __init__(self, strategy: Strategy, capital: float = 1000, portfolio= None):
+    def __init__(self, strategy, capital: float = 1000, portfolio= None):
         self.strategy = strategy
         self.capital = capital # Por defecto 1000 euros
         
-    def predict(self, obs):
+    def predict(self, obs, market):
         """_summary_
             Predicts the next action:
                 - 0: hold
@@ -16,8 +16,9 @@ class Broker():
         Returns:
             int: Hold, buy or sell action
         """
-        action = np.random.randint(3)
         
+        # action = np.random.randint(3)
+        action = self.strategy.decide_action(market)
         
         return action
         

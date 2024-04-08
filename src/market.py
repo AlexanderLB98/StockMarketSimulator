@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-from src.portfolio import Portfolio
+# from src.portfolio import Portfolio
 from src.dataAdquisition import DataAdquisition
 
 class Market():
@@ -15,14 +15,15 @@ class Market():
                2: 'SELL'}
     
     
-    def __init__(self, dataAdquisition: DataAdquisition = DataAdquisition("offline"), portfolio: Portfolio = None) :
+    def __init__(self, dataAdquisition: DataAdquisition = DataAdquisition("offline"), portfolio = None) :
         self.dataAdquisition = dataAdquisition
         self.companies = []
         self.timestep = 0
         self.plot_created = False
         self.portfolio = portfolio
         self.name = "AEX"
-        
+        self.current_price = 0
+        self.last_price = 0
         
     def _initialize_variables(self):
         obs = []
@@ -74,12 +75,17 @@ class Market():
                 reward = 0
         #else:  # HOLD
             
-        
+        # Update last price
+        # self.last_price = self.current_price
         
         self.timestep += 1
         if self.timestep > 100:
             done = True
-        return next_obs, total_reward, reward, done
+        return next_obs, total_reward, reward, done, action
+    
+    def update_last_price(self):
+        # Update last price
+        self.last_price = self.current_price
     
     def render_old(self):
         current_data = self.dataAdquisition.get_current_data()

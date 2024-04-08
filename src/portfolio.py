@@ -1,11 +1,11 @@
-from src.broker import Broker
-from src.strategy import Strategy
+# from broker import Broker
+# from strategy import Strategy
 
 
 
-class Portfolio(Broker):
-    def __init__(self, strategy: Strategy, capital: float = 1000):
-        super().__init__(strategy, capital)
+class Portfolio():
+    def __init__(self, capital: float = 1000):
+        # super().__init__(strategy, capital)
         self.shares = 0
         self.options = 0
         self.capital_inicial = capital
@@ -26,7 +26,7 @@ class Portfolio(Broker):
         
     def sell_share(self, market):
         self.shares -= 1
-        self.capital -= market.current_price
+        self.capital += market.current_price
         
 
     def add_option(self):
