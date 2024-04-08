@@ -24,6 +24,7 @@ class Market():
         self.name = "AEX"
         self.current_price = 0
         self.last_price = 0
+        self.date = None
         
     def _initialize_variables(self):
         obs = []
@@ -47,8 +48,10 @@ class Market():
         total_reward = 0
         self.dataAdquisition.step()
         
-        # Obtener el precio actual del activo
+        # Obtener el precio actual del activo y la fecha
         self.current_price = self.dataAdquisition.get_current_data()["Close"]
+        self.date = self.dataAdquisition.get_date()
+        
         reward = 0
         
         # Calcular la recompensa
@@ -64,10 +67,13 @@ class Market():
                 action = 0
                 reward = 0
         elif action == 2:  # SELL
-            if self.portfolio.shares > 0:
-            # self.portfolio.capital += self.current_price
-                self.portfolio.sell_share(self)
-                reward = self.current_price
+            if len(self.portfolio.shares) > 0:
+                # self.portfolio.capital += self.current_price
+
+                if self.portfolio.sell_share(self): # Debería hacer lo de dentro
+                    reward = self.current_price
+                else:
+                    action = 0
             else:
                 print(f"No puedes vender por que no tienes acciones de la empresa {self.name}")
                 print("Se pasa a Hold")
@@ -121,6 +127,8 @@ class Market():
             
             # Si el gráfico ya fue creado, simplemente añadir un punto al gráfico existente
             self.ax.plot(self.timestep, current_data, color + 'o', label=action_label)
-            #plt.pause(0.01)  # Pausa para actualizar el gráfico
+            plt.pause(0.01)  # Pausa para actualizar el gráfico
+            
+            # En un futuro quiero cambiar el plot por un gráfico de velas.
         else:
             print("No hay datos disponibles para renderizar en el mercado.")

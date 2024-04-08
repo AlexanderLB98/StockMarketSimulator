@@ -1,6 +1,20 @@
 import pandas as pd
 import numpy as np
 
+
+# from time_utils import change_format --> TODO: Pasar a clase
+import datetime
+
+def change_format(cad: str) -> str:
+    date = datetime.datetime.strptime(cad, "%Y-%m-%d").strftime("%d-%m-%Y")
+    date_split = date.split("-")
+    
+    return "-".join([d.lstrip("0") for d in date_split])
+
+def str_to_date(date_str: str) -> datetime.datetime:
+    return datetime.datetime.strptime(date_str, '%Y-%m-%d')
+
+
 class DataAdquisition:
     def __init__(self, mode = "offline", start_index = None) -> None:
         self.mode = mode
@@ -12,6 +26,7 @@ class DataAdquisition:
             
         if start_index is None: # Esto igual sobra, cambiarlo
             self.start_index = 10
+            
         
     
     def reset(self, start_index=None):
@@ -49,4 +64,10 @@ class DataAdquisition:
         except Exception as e:
             print("Error: " + str(e))
             
+        return df
     
+    def get_start_date(self):
+        return change_format(self.data["Date"][self.start_index])
+    
+    def get_date(self):
+        return change_format(self.data["Date"][self.current_index])

@@ -15,13 +15,14 @@ actions = {0: 'HOLD',
 def main():
     # Configuración inicial. Esto en un futuro saldrá de un json
     initial_capital = 10000 # En euros
-    num_episodes = 50 # numero de episodios, ya sean dias, semanas, o lo que sea el dt que represente el método step de la clase market
+    num_episodes = 2 # numero de episodios, ya sean dias, semanas, o lo que sea el dt que represente el método step de la clase market
     
     
     
     
     # Se instancia el portfolio
     portfolio = Portfolio(capital = initial_capital)
+    
     
     # Se instancia la estrategia
     strategy = Strategy(portfolio = portfolio)

@@ -24,6 +24,17 @@ class Strategy():
             optim_action = 1 # Buy
             print("La accion óptima sería comprar")
         else: 
+            """
+            Lo siguiente sería implementar en la estrategia 
+            un calculo del profit al vender la accion, para 
+            que no venda siemrpe. Para ello, habrá que añadir 
+            una mecanica que a la hora de comprar una accion, 
+            en ungar de share+1, añadir un diccionario, con la 
+            accion, alomejor informacion de la fecha de ocmpra, 
+            y e lvalor de la compra, y con ese precio calcular 
+            el profi, y solo vender si profit > 20% por ejemplo 
+            (ajustar para ser mas o menos consrvador)
+            """
             optim_action = 2 # Sell
             print("La accion óptima sería vender")
         
