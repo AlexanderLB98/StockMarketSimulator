@@ -1,7 +1,49 @@
 import matplotlib.pyplot as plt
+import json
 
 # from src.portfolio import Portfolio
-from src.dataAdquisition import DataAdquisition
+from src.dataAdquisition import DataAdquisition# , get_day_yf_data
+from src.utils import DotDict
+
+import yfinance as yf
+def get_day_yf_data(company: str = None, date = None):
+    # Obtener datos históricos para el índice AEX para la fecha actual
+    
+    # company = "^AEX"
+    # start_date = start_date or getDate("2020-01-10")
+    # start_date = start_date or getDate("2021-12-31")
+    
+    data = yf.download(company, start=date, end=date)
+
+    # Verificar si se obtuvieron datos para el día actual
+    if not data.empty:
+        # Mostrar los datos más importantes
+        first_data = data.iloc[0]
+        result = {
+            "Compañia": f'AEX --> ({date} ):',
+            "Apertura": f': {round(first_data["Open"], 2)}€',
+            "Máximo": f': {round(first_data["High"], 2)}€',
+            "Mínimo": f': {round(first_data["Low"], 2)}€',
+            "Cierre": f': {round(first_data["Close"], 2)}€',
+            "Volumen": f': {int(first_data["Volume"])}',
+        }
+        print(result)
+        return data
+    else:
+        result = 'No hay datos disponibles.'
+        assert "No Data from yfinance"
+    pass
+
+
+class Company():
+    
+    def __init(self, name, initial_price=None):
+        self.name = name
+        self.initial_price = initial_price
+        self.current_price = initial_price
+        
+    
+    
 
 class Market():
     
@@ -17,7 +59,6 @@ class Market():
     
     def __init__(self, dataAdquisition: DataAdquisition = DataAdquisition("offline"), portfolio = None) :
         self.dataAdquisition = dataAdquisition
-        self.companies = []
         self.timestep = 0
         self.plot_created = False
         self.portfolio = portfolio
@@ -26,11 +67,35 @@ class Market():
         self.last_price = 0
         self.date = None
         
+    def _load_config(self, config_file):
+        with open(config_file) as f:
+            self.config = DotDict(json.load(f))
+            print(self.config)
+        
+    def _initialize_companies(self):
+        self.companies = self.config.companies
+        
+        for company in self.companies:
+            company["data"] = get_day_yf_data(company["name"], date = self.date)
+            company["current_price"] = round(company["data"].iloc[self.timestep]["Open"], 2)
+            print(f"Current price for {company["name"]}: {company["current_price"]}\n")
+        
+    def _step_companies(self):
+        self.companies = self.config.companies
+        
+        for company in self.companies:
+            company["current_price"] = round(company["data"].iloc[self.timestep]["Open"], 2)
+            print(f"Current price for {company["name"]}: {company["current_price"]}\n")
+        
+    
     def _initialize_variables(self):
         obs = []
         self.timestep = 0
         self.plot_created = False
         self.done = False
+        self._load_config("config.json")
+        self._initialize_companies()
+        
         self._initialize_fig()
         return obs
         
@@ -47,6 +112,11 @@ class Market():
         #reward = {}
         total_reward = 0
         self.dataAdquisition.step()
+        
+        
+        current_price = []
+        #for company in self.companies:
+            #current_price[company] = self.
         
         # Obtener el precio actual del activo y la fecha
         self.current_price = self.dataAdquisition.get_current_data()["Close"]
@@ -83,6 +153,9 @@ class Market():
             
         # Update last price
         # self.last_price = self.current_price
+        
+        #Step for companies
+        self._step_companies()
         
         self.timestep += 1
         if self.timestep > 100:

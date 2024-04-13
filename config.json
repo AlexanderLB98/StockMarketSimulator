@@ -1,0 +1,17 @@
+{
+    "companies": [
+      {
+        "name": "^AEX",
+        "initial_price": 100
+      },
+      {
+        "name": "TSLA",
+        "initial_price": 150
+      },
+      {
+        "name": "AMZN",
+        "initial_price": 200
+      }
+    ]
+  }
+  

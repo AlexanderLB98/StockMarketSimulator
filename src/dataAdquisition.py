@@ -1,6 +1,9 @@
 import pandas as pd
 import numpy as np
 
+import yfinance as yf
+
+from src.time_utils import getDate
 
 # from time_utils import change_format --> TODO: Pasar a clase
 import datetime
@@ -26,7 +29,7 @@ class DataAdquisition:
             
         if start_index is None: # Esto igual sobra, cambiarlo
             self.start_index = 10
-            
+        self.get_yf_data("")
         
     
     def reset(self, start_index=None):
@@ -71,3 +74,69 @@ class DataAdquisition:
     
     def get_date(self):
         return change_format(self.data["Date"][self.current_index])
+    
+    def get_yf_data(company: str = None, start_date: str = None, end_date: str = None):
+        # Obtener datos históricos para el índice AEX para la fecha actual
+        
+        company = "^AEX"
+        start_date = start_date or getDate("2020-01-10")
+        start_date = start_date or getDate("2021-12-31")
+        
+        data = yf.download(company, start=start_date, end=end_date)
+
+        # Verificar si se obtuvieron datos para el día actual
+        if not data.empty:
+            # Mostrar los datos más importantes
+            first_data = data.iloc[0]
+            result = {
+                "Compañia": f'AEX --> ({start_date} -> {end_date}):',
+                "Apertura": f': {round(first_data["Open"], 2)}€',
+                "Máximo": f': {round(first_data["High"], 2)}€',
+                "Mínimo": f': {round(first_data["Low"], 2)}€',
+                "Cierre": f': {round(first_data["Close"], 2)}€',
+                "Volumen": f': {int(first_data["Volume"])}',
+            }
+            print(result)
+            last_data = data.iloc[-1]
+            result = {
+                "Compañia": f'AEX --> ({start_date} -> {end_date}):',
+                "Apertura": f': {round(last_data["Open"], 2)}€',
+                "Máximo": f': {round(last_data["High"], 2)}€',
+                "Mínimo": f': {round(last_data["Low"], 2)}€',
+                "Cierre": f': {round(last_data["Close"], 2)}€',
+                "Volumen": f': {int(last_data["Volume"])}',
+            }
+            print(result)
+            return data
+        else:
+            result = 'No hay datos disponibles.'
+            assert "No Data from yfinance"
+        pass
+    
+    def get_day_yf_data(company: str = None, date: str = None):
+        # Obtener datos históricos para el índice AEX para la fecha actual
+        
+        # company = "^AEX"
+        # start_date = start_date or getDate("2020-01-10")
+        # start_date = start_date or getDate("2021-12-31")
+        
+        data = yf.download(company, start=date, end=date)
+
+        # Verificar si se obtuvieron datos para el día actual
+        if not data.empty:
+            # Mostrar los datos más importantes
+            first_data = data.iloc[0]
+            result = {
+                "Compañia": f'AEX --> ({date} ):',
+                "Apertura": f': {round(first_data["Open"], 2)}€',
+                "Máximo": f': {round(first_data["High"], 2)}€',
+                "Mínimo": f': {round(first_data["Low"], 2)}€',
+                "Cierre": f': {round(first_data["Close"], 2)}€',
+                "Volumen": f': {int(first_data["Volume"])}',
+            }
+            print(result)
+            return data
+        else:
+            result = 'No hay datos disponibles.'
+            assert "No Data from yfinance"
+        pass
