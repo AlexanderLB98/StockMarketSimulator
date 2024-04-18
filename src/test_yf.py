@@ -1,6 +1,6 @@
 
 # from dataAdquisition import get_yf_data
-from dataAdquisition import DataAdquisition
+from src.DataAdquisition import DataAdquisition
 
 start_date="2023-01-01"
 end_date="2023-09-20"

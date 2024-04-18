@@ -1,10 +1,16 @@
-from src.company import Company
-from src.dataAdquisition import DataAdquisition
-from src.market import Market
+import tkinter as tk
 
-from src.strategy import Strategy
-from src.portfolio import Portfolio
-from src.broker import Broker
+from src.Company import Company
+from src.DataAdquisition import DataAdquisition
+from src.Market import Market
+
+from src.Strategy import Strategy
+from src.Portfolio import Portfolio
+from src.Broker import Broker
+
+from src.Render import Render
+from src.GUI import StockSimulatorGUI
+
 
 # Define el diccionario de acciones globalmente
 actions = {0: 'HOLD',
@@ -31,7 +37,23 @@ def main():
     broker = Broker(strategy = strategy, capital = initial_capital, portfolio = portfolio)
     
     # Definimos el mercado
-    market = Market(portfolio = portfolio)
+    market = Market(portfolio = portfolio, initial_date = "01-01-2016")
+    
+   
+    # Crear la ventana Tkinter
+    root = tk.Tk()
+    
+    # Crear una instancia de la clase GUI y pasarle la ventana, el mercado y el broker
+    gui = StockSimulatorGUI(root, market, broker)
+    
+    # Ejecutar el bucle principal de la aplicación Tkinter
+    root.mainloop()
+
+    render = Render(market = market, broker = broker)
+    
+    
+    
+    
     
     rendimientos = {}
     for episode in range(num_episodes):
@@ -49,7 +71,8 @@ def main():
             
             
             obs = next_obs
-            market.render(action=fixed_action)
+            render.render(action = action)
+            # market.render(action=fixed_action)
             print(f"Current capital: {portfolio.capital}")
             #print(f"Reward: {reward}")
         print("Simulación terminada con éxito")
@@ -62,7 +85,7 @@ def main():
     max_key = max(rendimientos, key=rendimientos.get)
     max_reward = rendimientos[max_key]
     print(f"Mejor episodio: {max_key} con recompensa: {max_reward}")
-        
+    input("Presiona Enter para terminar...")  # Pausa hasta que el usuario presione Enter
         
 if __name__ == "__main__":
     main()

@@ -33,3 +33,6 @@ class Broker():
     
     def sell_option(self, option):
         pass
+    
+    def render(self):
+        pass
