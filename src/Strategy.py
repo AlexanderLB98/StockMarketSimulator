@@ -8,6 +8,10 @@ class Strategy():
         self.portfolio = portfolio
         self.buffer = [] # Para qué estaba este buffer???? doc
         # self.market = market
+        
+        """
+            indicators
+        """
                 
     def decide_action(self, market):
         
