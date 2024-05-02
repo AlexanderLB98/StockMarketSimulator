@@ -1,7 +1,8 @@
 
 from src.broker import Broker
 from src.company import Company
-from src.dataAdquisition import DataAdquisition
+# from src.dataAdquisition import DataAdquisition
+#from src.market_old import Market
 from src.market import Market
 from src.portfolio import Portfolio
 from src.strategy import Strategy
@@ -16,7 +17,7 @@ actions = {0: 'HOLD',
 def main():
     # Configuración inicial. Esto en un futuro saldrá de un json
     initial_capital = 1000 # En euros
-    num_episodes = 50 # numero de episodios, ya sean dias, semanas, o lo que sea el dt que represente el método step de la clase market
+    num_episodes = 1 # numero de episodios, ya sean dias, semanas, o lo que sea el dt que represente el método step de la clase market
     
     
     # Se instancia la estrategia
