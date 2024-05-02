@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #0e1572;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+        .menu {
+            list-style: none;
+            padding: 0;
+            text-align: center;
+        }
+        .menu li {
+            display: inline;
+            margin-right: 20px;
+        }
+        .menu a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 18px;
+        }
+        .menu a:hover {
+            color: #55a3e1;
+        }
+        .content {
+            padding: 20px;
+            margin: 0 auto; /* Centrar el contenido horizontalmente */
+            text-align: left; /* Restaurar el texto alineado a la izquierda */
+            max-width: 800px; /* Establecer un ancho máximo para evitar que el contenido sea demasiado ancho */
+            background-color: #fff; /* Fondo blanco para el contenido */
+            border: 1px solid #ccc; /* Borde alrededor del contenido */
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <ul class="menu">
+            <li><a href="/">Inicio</a></li>
+            <li><a href="/pagina1">Página 1</a></li>
+            <li><a href="/pagina2">Página 2</a></li>
+            <li><a href="/pagina3">Página 3</a></li>
+            <li><a href="/pagina4">Página 4</a></li>
+        </ul>
+    </div>
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 
 from src.portfolio import Portfolio
-from dataAdquisition.dataAdquisition import DataAdquisition
+from src.dataAdquisition.dataAdquisition import DataAdquisition
 
 class Market():
     

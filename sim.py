@@ -1,4 +1,6 @@
 
+
+
 from src.broker import Broker
 from src.company import Company
 from src.dataAdquisition.dataAdquisition import DataAdquisition
@@ -15,7 +17,7 @@ actions = {0: 'HOLD',
            2: 'SELL'}
 
 
-def main():
+def sim():
     # Configuración inicial. Esto en un futuro saldrá de un json
     initial_capital = 1000 # En euros
     num_episodes = 1 # numero de episodios, ya sean dias, semanas, o lo que sea el dt que represente el método step de la clase market
@@ -33,6 +35,8 @@ def main():
     # Definimos el mercado
     market = Market(portfolio = portfolio)
     
+    visited = []
+    
     rendimientos = {}
     for episode in range(num_episodes):
         obs, done = market.reset()
@@ -42,6 +46,7 @@ def main():
             action = broker.predict(obs)
             next_obs, total_reward, reward, done = market.step(action)
             obs = next_obs
+            visited.append(obs)
             market.render(action=action)
             #print(f"Reward: {reward}")
         print("Simulación terminada con éxito")
@@ -54,7 +59,9 @@ def main():
     max_key = max(rendimientos, key=rendimientos.get)
     max_reward = rendimientos[max_key]
     print(f"Mejor episodio: {max_key} con recompensa: {max_reward}")
-        
+    
+    return visited
         
 if __name__ == "__main__":
-    main()
+    obs = sim()
+    print(obs)
